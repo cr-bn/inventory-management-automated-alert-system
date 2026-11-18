@@ -2,6 +2,12 @@
 
 An automated inventory monitoring and email notification system built with **Google Sheets, n8n, Gmail API, and Docker**.
 
+## Live Dashboard
+
+Explore the inventory management system in Google Sheets, including raw materials, lot tracking, stock calculations, automated alerts, and interactive visualizations.
+
+[View Interactive Inventory Dashboard](https://docs.google.com/spreadsheets/d/14km7hxr6Em66WGkihxFUfLWTc4nWNCpidPcmDklfck0/edit?usp=sharing)
+
 ## Project Overview
 
 This project demonstrates how workflow automation can support inventory monitoring, improve operational visibility, and reduce manual follow-up tasks.
