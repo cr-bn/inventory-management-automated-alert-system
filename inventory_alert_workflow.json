@@ -6,14 +6,12 @@
         "documentId": {
           "__rl": true,
           "value": "YOUR_GOOGLE_SHEET_ID",
-          "mode": "id",
-          "cachedResultName": "Inventory_Management_System"
+          "mode": "id"
         },
         "sheetName": {
           "__rl": true,
           "value": "Alerts",
-          "mode": "name",
-          "cachedResultName": "Alerts"
+          "mode": "name"
         },
         "filtersUI": {
           "values": []
@@ -27,7 +25,13 @@
         0
       ],
       "id": "2b85187a-30d8-41ac-b6fc-58190bc6d5c1",
-      "name": "Get row(s) in sheet"
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Configure your googleSheetsOAuth2Api credential"
+        }
+      }
     },
     {
       "parameters": {
@@ -51,12 +55,12 @@
             },
             {
               "id": "f7ff7b04-05ea-4725-831b-54aef4355029",
-              "leftValue": "={{ $json.Email_Status }}",
-              "rightValue": "Pending",
+              "leftValue": "={{ $json.Alert_Type !== $json.Last_Notified_Alert }}",
+              "rightValue": "{{ $json.Alert_Type !== $json.Last_Notified_Alert }}",
               "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
               }
             }
           ],
@@ -75,7 +79,7 @@
     },
     {
       "parameters": {
-        "sendTo": "YOUR_EMAIL@example.com",
+        "sendTo": "your-email@example.com",
         "subject": "=Inventory Management - Daily Alerts ({{ $json.alerts.length }})",
         "emailType": "text",
         "message": "={{ $json.alerts.map((a, i) =>\n`ALERT ${i + 1}\nAlert ID: ${a.Alert_ID}\nType: ${a.Alert_Type}\nMaterial: ${a.Material_Name} (${a.Material_ID})\nLot: ${a.Lot_ID || 'N/A'}\nCurrent Stock: ${a.Current_Stock}\nExpiration Date: ${a.Expiration_Date || 'N/A'}\nStatus: ${a.Status}`\n).join('\\n\\n--------------------\\n\\n') }}",
@@ -88,7 +92,13 @@
         0
       ],
       "id": "b44687fe-3a57-4f21-acd1-379b57e333e1",
-      "name": "Send a message"
+      "name": "Send a message",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Configure your gmailOAuth2 credential"
+        }
+      }
     },
     {
       "parameters": {
@@ -96,20 +106,19 @@
         "documentId": {
           "__rl": true,
           "value": "YOUR_GOOGLE_SHEET_ID",
-          "mode": "id",
-          "cachedResultName": "Inventory_Management_System"
+          "mode": "id"
         },
         "sheetName": {
           "__rl": true,
           "value": "Alerts",
-          "mode": "name",
-          "cachedResultName": "Alerts"
+          "mode": "name"
         },
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
             "Alert_ID": "={{ $json.Alert_ID }}",
-            "Email_Status": "Sent"
+            "Email_Status": "Sent",
+            "Last_Notified_Alert": "={{ $json.Last_Notified_Alert }}"
           },
           "matchingColumns": [
             "Alert_ID"
@@ -132,7 +141,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Material_ID",
@@ -141,7 +151,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Material_Name",
@@ -150,7 +161,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Lot_ID",
@@ -159,7 +171,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Current_Stock",
@@ -168,7 +181,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Expiration_Date",
@@ -177,7 +191,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Alert_Date",
@@ -186,7 +201,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Status",
@@ -195,11 +211,22 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Email_Status",
               "displayName": "Email_Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Last_Notified_Alert",
+              "displayName": "Last_Notified_Alert",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -216,7 +243,7 @@
               "type": "number",
               "canBeUsedToMatch": true,
               "readOnly": true,
-              "removed": true
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -231,7 +258,13 @@
         0
       ],
       "id": "bd597ed1-c818-42cf-a79b-de7cf201d731",
-      "name": "Update row in sheet"
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Configure your googleSheetsOAuth2Api credential"
+        }
+      }
     },
     {
       "parameters": {
@@ -269,7 +302,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const alerts = $('Aggregate').first().json.alerts;\n\nreturn alerts.map(alert => ({\n  json: {\n    Alert_ID: alert.Alert_ID,\n    Email_Status: 'Sent'\n  }\n}));"
+        "jsCode": "\nconst alerts = $('Aggregate').first().json.alerts;\n\nreturn alerts.map(alert => ({\n  json: {\n    Alert_ID: alert.Alert_ID,\n    Email_Status: 'Sent',\n    Last_Notified_Alert: alert.Alert_Type\n  }\n}));\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -281,6 +314,7 @@
       "name": "Code in JavaScript"
     }
   ],
+  "pinData": {},
   "connections": {
     "Get row(s) in sheet": {
       "main": [
