@@ -1,0 +1,359 @@
+{
+  "name": "Inventory Management System",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "id",
+          "cachedResultName": "Inventory_Management_System"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Alerts",
+          "mode": "name",
+          "cachedResultName": "Alerts"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -32,
+        0
+      ],
+      "id": "2b85187a-30d8-41ac-b6fc-58190bc6d5c1",
+      "name": "Get row(s) in sheet"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "ffba2b27-6788-4b98-9a50-3b68e5902eb0",
+              "leftValue": "={{ $json.Alert_Type }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f7ff7b04-05ea-4725-831b-54aef4355029",
+              "leftValue": "={{ $json.Email_Status }}",
+              "rightValue": "Pending",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.4,
+      "position": [
+        144,
+        0
+      ],
+      "id": "e05fe96e-1a8a-4321-aaaa-9027df7efb06",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "sendTo": "YOUR_EMAIL@example.com",
+        "subject": "=Inventory Management - Daily Alerts ({{ $json.alerts.length }})",
+        "emailType": "text",
+        "message": "={{ $json.alerts.map((a, i) =>\n`ALERT ${i + 1}\nAlert ID: ${a.Alert_ID}\nType: ${a.Alert_Type}\nMaterial: ${a.Material_Name} (${a.Material_ID})\nLot: ${a.Lot_ID || 'N/A'}\nCurrent Stock: ${a.Current_Stock}\nExpiration Date: ${a.Expiration_Date || 'N/A'}\nStatus: ${a.Status}`\n).join('\\n\\n--------------------\\n\\n') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        464,
+        0
+      ],
+      "id": "b44687fe-3a57-4f21-acd1-379b57e333e1",
+      "name": "Send a message"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "id",
+          "cachedResultName": "Inventory_Management_System"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Alerts",
+          "mode": "name",
+          "cachedResultName": "Alerts"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Alert_ID": "={{ $json.Alert_ID }}",
+            "Email_Status": "Sent"
+          },
+          "matchingColumns": [
+            "Alert_ID"
+          ],
+          "schema": [
+            {
+              "id": "Alert_ID",
+              "displayName": "Alert_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Alert_Type",
+              "displayName": "Alert_Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Material_ID",
+              "displayName": "Material_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Material_Name",
+              "displayName": "Material_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lot_ID",
+              "displayName": "Lot_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Current_Stock",
+              "displayName": "Current_Stock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Expiration_Date",
+              "displayName": "Expiration_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Alert_Date",
+              "displayName": "Alert_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email_Status",
+              "displayName": "Email_Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        832,
+        0
+      ],
+      "id": "bd597ed1-c818-42cf-a79b-de7cf201d731",
+      "name": "Update row in sheet"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -192,
+        0
+      ],
+      "id": "cd1d10a4-f42d-40e6-9a42-44fa9d6c97ec",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "alerts",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        304,
+        0
+      ],
+      "id": "dc66eb11-8a45-4598-9fc2-57ff1aade355",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "jsCode": "const alerts = $('Aggregate').first().json.alerts;\n\nreturn alerts.map(alert => ({\n  json: {\n    Alert_ID: alert.Alert_ID,\n    Email_Status: 'Sent'\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        0
+      ],
+      "id": "11dd83f5-38b1-43a6-88fd-22e2d5acc9ce",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "connections": {
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "nodeGroups": [],
+  "tags": []
+}
