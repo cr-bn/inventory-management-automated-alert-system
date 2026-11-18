@@ -30,7 +30,7 @@ Designed around a fictional dietary supplement manufacturing environment, the sy
 | JavaScript | Processing alert records |
 
 ## Workflow Architecture
-
+![n8n Inventory Automation Workflow](workflow.png)
 ```text
 Schedule Trigger (Daily, 8:00 AM)
           ↓
